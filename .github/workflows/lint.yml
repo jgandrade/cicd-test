@@ -48,6 +48,9 @@ jobs:
         with:
           tags: v${{ env.VERSION }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_url: https://github.com
+          push_to_submodules: on-demand
+          directory: .
 
       - name: Create Release
         id: create_release
