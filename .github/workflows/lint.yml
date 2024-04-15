@@ -29,19 +29,19 @@ jobs:
 
       - name: Update Version
         run: |
-          git config --global user.email "johnglennandrade@gmail.com"
-          git config --global user.name "John Glenn Andrade"
+          git config --global user.email "${{ secrets.USER_EMAIL }}"
+          git config --global user.name "${{ secrets.USER_NAME }}"
           yarn version --patch
           node -p "console.log(require('./package.json').version)" > version.txt
 
       - name: Read Version from File
         id: read_version
-        run: echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
+        run: echo "VERSION=$(cat version.txt)" >> ${{ vars.VERSION }}
         
       - name: Create Release Tag
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ vars.VERSION }}
         with:
           tag_name: v${{ env.VERSION }}
           release_name: Release ${{ env.VERSION }}
