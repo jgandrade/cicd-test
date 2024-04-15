@@ -40,24 +40,24 @@ jobs:
         id: read_version
         run: echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
         
-      - name: Create Git Tag
-        run: git tag -f v${{ env.VERSION }}
-
-      - name: Push Git Tag
-        run:
-          git config --global user.email "${{ secrets.USER_EMAIL }}"
-          git config --global user.name "${{ secrets.USER_NAME }}"
-          git push origin v${{ env.VERSION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ env.VERSION }}
-          release_name: Release v${{ env.VERSION }}
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./my-artifact.zip
+          asset_name: my-artifact.zip
+          asset_content_type: application/zip
