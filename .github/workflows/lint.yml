@@ -44,7 +44,7 @@ jobs:
         run: git tag -f v${{ env.VERSION }}
 
       - name: Push Git Tag
-        run: git push origin v${{ steps.read_version.outputs.VERSION }}
+        run: git push origin v${{ env.VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -54,7 +54,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.read_version.outputs.VERSION }}
-          release_name: Release v${{ steps.read_version.outputs.VERSION }}
+          tag_name: v${{ env.VERSION }}
+          release_name: Release v${{ env.VERSION }}
           draft: false
           prerelease: false
