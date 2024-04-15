@@ -38,15 +38,22 @@ jobs:
         id: read_version
         run: echo "VERSION=$(cat version.txt)" >> ${{ vars.VERSION }}
         
+      - name: Create Git Tag
+        run: git tag v${{ steps.read_version.outputs.VERSION }}
+
+      - name: Push Git Tag
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tags: v${{ steps.read_version.outputs.VERSION }}
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            Release ${{ vars.VERSION }}
+          tag_name: v${{ steps.read_version.outputs.VERSION }}
+          release_name: Release ${{ steps.read_version.outputs.VERSION }}
           draft: false
           prerelease: false
