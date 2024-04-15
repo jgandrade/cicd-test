@@ -34,18 +34,22 @@ jobs:
           yarn version --patch
           node -p "console.log(require('./package.json').version)" > version.txt
 
-      - name: Read Version from File
-        id: read_version
-        run: echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
+          - name: Read Version from File
+          id: read_version
+          run: echo "VERSION=$(cat version.txt)" >> $RUNNER_TEMP/version.env
+        
+      - name: Load Version from File
+        run: source $RUNNER_TEMP/version.env
         
       - name: Create Release Tag
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ env.VERSION }}
         with:
-            tag_name: v${{ env.VERSION }}
-            release_name: Release ${{ env.VERSION }}
-            body: |
-              Release ${{ env.VERSION }}
+          tag_name: v${{ env.VERSION }}
+          release_name: Release ${{ env.VERSION }}
+          body: |
+            Release ${{ env.VERSION }}
             draft: false
             prerelease: false
