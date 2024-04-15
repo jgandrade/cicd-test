@@ -41,7 +41,7 @@ jobs:
         run: echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
         
       - name: Create Git Tag
-        run: git tag v${{ env.VERSION }}
+        run: git tag -f v${{ env.VERSION }}
 
       - name: Push Git Tag
         run: git push origin v${{ steps.read_version.outputs.VERSION }}
