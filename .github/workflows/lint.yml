@@ -32,7 +32,9 @@ jobs:
           git config --global user.email "${{ secrets.USER_EMAIL }}"
           git config --global user.name "${{ secrets.USER_NAME }}"
           yarn version --patch
-          node -p "console.log(require('./package.json').version)" > version.txt
+          VERSION=$(node -p "require('./package.json').version")
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo $VERSION > version.txt
 
       - name: Read Version from File
         id: read_version
