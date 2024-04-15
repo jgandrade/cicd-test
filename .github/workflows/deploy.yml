@@ -52,7 +52,7 @@ jobs:
         run: git tag -f v${{ env.VERSION }}
 
       - name: Push Git Tag
-        run: git push origin v${{ env.VERSION }}
+        run: git push -f origin v${{ env.VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
