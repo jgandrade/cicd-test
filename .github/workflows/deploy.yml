@@ -37,23 +37,33 @@ jobs:
 
       - name: Update Version
         run: |
-          git config --global user.email "johnglennandrade@gmail.com"
-          git config --global user.name "John Glenn Andrade"
+          git config --global user.email "${{ secrets.USER_EMAIL }}"
+          git config --global user.name "${{ secrets.USER_NAME }}"
           yarn version --patch
-          node -p "console.log(require('./package.json').version)" > version.txt
+          VERSION=$(node -p "require('./package.json').version")
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo $VERSION > version.txt
 
       - name: Read Version from File
         id: read_version
         run: echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
         
-      - name: Create Release Tag
+      - name: Create Git Tag
+        run: git tag -f v${{ env.VERSION }}
+
+      - name: Push Git Tag
+        uses: ad-m/github-push-action@master
+        with:
+          tags: v${{ env.VERSION }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-            tag_name: v${{ env.VERSION }}
-            release_name: Release ${{ env.VERSION }}
-            body: |
-              Release ${{ env.VERSION }}
-            draft: false
-            prerelease: false
+          tag_name: v${{ env.VERSION }}
+          release_name: Release v${{ env.VERSION }}
+          draft: false
+          prerelease: false
