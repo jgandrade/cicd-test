@@ -34,9 +34,9 @@ jobs:
           yarn version --patch
           node -p "console.log(require('./package.json').version)" > version.txt
 
-          - name: Read Version from File
-          id: read_version
-          run: echo "VERSION=$(cat version.txt)" >> $RUNNER_TEMP/version.env
+      - name: Read Version from File
+        id: read_version
+        run: echo "VERSION=$(cat version.txt)" >> $RUNNER_TEMP/version.env
         
       - name: Load Version from File
         run: source $RUNNER_TEMP/version.env
