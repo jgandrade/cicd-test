@@ -1,7 +1,7 @@
 {
   "name": "graphql-apollo",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.0",
   "type": "module",
   "repository": "https://github.com/jgandrade/cicd-test.git",
   "author": "jgandrade <johnglennandrade@gmail.com>",
