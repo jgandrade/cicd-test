@@ -15,11 +15,9 @@ module.exports = {
       { allowConstantExport: true },
     ],
   },
-  extends: ["airbnb", "airbnb-typescript", "plugin:prettier/recommended"],
-  rules: {
-    indent: "error",
-  },
+  extends: ["airbnb", "airbnb-typescript"],
   parserOptions: {
     project: ["./tsconfig.json", "./tsconfig.node.json"],
   },
+  ignorePatterns: ["./github/*", "./husky/*"],
 };
