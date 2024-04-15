@@ -45,16 +45,15 @@ jobs:
       - name: Read Version from File
         id: read_version
         run: echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
-
+        
       - name: Create Release Tag
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ steps.read_version.outputs.VERSION }}
         with:
-          tag_name: v${{ env.VERSION }}
-          release_name: Release ${{ env.VERSION }}
-          body: |
-            Release ${{ env.VERSION }}
-          draft: false
-          prerelease: false
+            tag_name: v${{ env.VERSION }}
+            release_name: Release ${{ env.VERSION }}
+            body: |
+              Release ${{ env.VERSION }}
+            draft: false
+            prerelease: false
