@@ -37,9 +37,10 @@ jobs:
 
       - name: Update Version
         run: |
+          git config --global user.email "${secrets.USER_EMAIL}"
+          git config --global user.name "${secrets.USER_NAME}"
           yarn version --patch
-          VERSION=$(node -p "require('./package.json').version")
-          echo "New version: $VERSION"
+          node -p "console.log(require('./package.json').version)" > version.txt
 
       - name: Read Version from File
         id: read_version
