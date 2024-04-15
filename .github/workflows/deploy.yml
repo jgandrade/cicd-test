@@ -34,3 +34,25 @@ jobs:
 
       - name: Run Build
         run: yarn build
+
+      - name: Update Version
+        run: |
+          yarn version --patch
+          VERSION=$(node -p "require('./package.json').version")
+          echo "New version: $VERSION"
+
+      - name: Read Version from File
+        id: read_version
+        run: echo "::set-output name=VERSION::$(cat version.txt)"
+
+      - name: Create Release Tag
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.read_version.outputs.VERSION }}
+          release_name: Release ${{ steps.read_version.outputs.VERSION }}
+          body: |
+            Release ${{ steps.read_version.outputs.VERSION }}
+          draft: false
+          prerelease: false
