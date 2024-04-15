@@ -1,8 +1,8 @@
 name: Run Deploy
-on: 
-    pull_request:
-        types:
-            - closed
+on:
+  pull_request:
+    types:
+      - closed
 
 jobs:
   run_deploy:
@@ -13,14 +13,24 @@ jobs:
         node-version: [20.x]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{matrix.node-version}}
-      - name: install dependencies
+
+      - name: Check Dependency Cache
+        uses: actions/cache@v4
+        with:
+          path: ./node_modules
+          key: ${{runner.os}}-node-${{hashFiles('./yarn.lock')}}
+
+      - name: Install Dependencies
         run: yarn
-      - name: run lint
+
+      - name: Run ESLint and Prettier
         run: yarn lint
-      - name: run build
+
+      - name: Run Build
         run: yarn build
