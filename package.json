@@ -34,8 +34,5 @@
     "eslint-plugin-react-refresh": "^0.4.6",
     "husky": "^9.0.11",
     "typescript": "^5.2.2"
-  },
-  "hooks": {
-    "pre-commit": "yarn lint"
   }
 }
